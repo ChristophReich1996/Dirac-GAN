@@ -6,7 +6,11 @@ This work was done as part of the lecture deep generative models at TU Darmstadt
 
 ## Dependencies
 
-DiracGAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required but can be used to speed up computation. All additional dependencies can be seen in the [`requirements.txt`](requirements.txt) file.
+DiracGAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required but can be used to speed up computation. All additional dependencies can be seen in the [`requirements.txt`](requirements.txt) file. To install all dependencies simply run:
+
+```shellscript
+pip install -r requirements.txt
+```
 
 ## Usage
 
