@@ -4,7 +4,11 @@ This repository implements (PyTorch) the DiracGAN proposed in the paper "Which T
 
 This work was done as part of the lecture deep generative models at TU Darmstadt supervised by [Dr. Anirban Mukhopadhyay](https://www.informatik.tu-darmstadt.de/gris/startseite_1/team/team_details_60224.en.jsp).
 
-# Rerefences
+## Dependencies
+
+DiracGAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required but can be used to speed up computation. All additional dependencies can be seen in the `[requirements.txt](requirements.txt)` file.
+
+## Rerefences
 
 ```bibtex
 [1] @inproceedings{Mescheder2018,
