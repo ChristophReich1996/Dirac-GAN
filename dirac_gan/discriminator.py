@@ -1,6 +1,5 @@
-from typing import Dict, Any, Type, Tuple
+from typing import Dict, Any
 
-import torch
 import torch.nn as nn
 
 from dirac_gan.generator import Generator
