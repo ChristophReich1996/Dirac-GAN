@@ -17,7 +17,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-## Rerefences
+## References
 
 ```bibtex
 [1] @inproceedings{Mescheder2018,
