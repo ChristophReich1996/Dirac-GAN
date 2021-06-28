@@ -282,3 +282,55 @@ class HingeGANLossDiscriminator(nn.Module):
                                discriminator_prediction_real - 1.).mean() \
                - torch.minimum(torch.tensor(0., dtype=torch.float, device=discriminator_prediction_fake.device),
                                - discriminator_prediction_fake - 1.).mean()
+
+
+class R1(nn.Module):
+    """
+    Implementation of the R1 GAN regularization.
+    """
+
+    def __init__(self):
+        """
+        Constructor method
+        """
+        # Call super constructor
+        super(R1, self).__init__()
+
+    def forward(self, prediction_real: torch.Tensor, image_real: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass to compute the regularization
+        :param prediction_real: (torch.Tensor) Prediction of the discriminator for a batch of real images
+        :param image_real: (torch.Tensor) Batch of the corresponding real images
+        :return: (torch.Tensor) Loss value
+        """
+        # Calc gradient
+        grad_real, = torch.autograd.grad(outputs=prediction_real.sum(), inputs=image_real, create_graph=True)
+        # Calc regularization
+        regularization_loss = 0.5 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        return regularization_loss
+
+
+class R2(nn.Module):
+    """
+    Implementation of the R2 GAN regularization.
+    """
+
+    def __init__(self):
+        """
+        Constructor method
+        """
+        # Call super constructor
+        super(R2, self).__init__()
+
+    def forward(self, prediction_fake: torch.Tensor, image_fake: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass to compute the regularization
+        :param prediction_real: (torch.Tensor) Prediction of the discriminator for a batch of real images
+        :param image_real: (torch.Tensor) Batch of the corresponding real images
+        :return: (torch.Tensor) Loss value
+        """
+        # Calc gradient
+        grad_real = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=image_fake, create_graph=True)
+        # Calc regularization
+        regularization_loss = 0.5 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        return regularization_loss
