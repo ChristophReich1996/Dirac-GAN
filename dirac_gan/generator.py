@@ -23,6 +23,13 @@ class Generator(nn.Module):
         if spectral_norm:
             self.linear_layer = torch.nn.utils.spectral_norm(self.linear_layer)
 
+    def get_gradient(self) -> float:
+        """
+        Method returns the gradient of the weight
+        :return: (float) Gradient value
+        """
+        return self.linear_layer.weight.grad.item()
+
     def set_weight(self, weight: torch.Tensor) -> None:
         """
         Method sets the weight factor of the linear layer
