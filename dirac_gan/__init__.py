@@ -6,3 +6,7 @@ from dirac_gan.loss import GANLossGenerator, GANLossDiscriminator, NSGANLossGene
     LSGANLossGenerator, LSGANLossDiscriminator, WassersteinGANLossGenerator, WassersteinGANLossDiscriminator, \
     WassersteinGANLossGPGenerator, WassersteinGANLossGPDiscriminator, HingeGANLossGenerator, HingeGANLossDiscriminator, \
     R1, R2
+# Import model wrapper
+from dirac_gan.model_wrapper import ModelWrapper
+# Import hyperparameters
+from dirac_gan.config import HYPERPARAMETERS

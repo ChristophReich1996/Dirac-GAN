@@ -23,6 +23,16 @@ class Generator(nn.Module):
         if spectral_norm:
             self.linear_layer = torch.nn.utils.spectral_norm(self.linear_layer)
 
+    def set_weight(self, weight: torch.Tensor) -> None:
+        """
+        Method sets the weight factor of the linear layer
+        :param weight: (torch.Tensor) Value to be set
+        """
+        # Reshape given tensor
+        weight = weight.view(1, 1)
+        # Check size of parameter
+        self.linear_layer.weight.data = weight
+
     def forward(self, noise: torch.Tensor) -> torch.Tensor:
         """
         Forward pass of the generator
