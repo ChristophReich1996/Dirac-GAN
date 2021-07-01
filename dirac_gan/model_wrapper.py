@@ -56,7 +56,7 @@ class ModelWrapper(object):
             self.generator_optimizer.zero_grad()
             self.discriminator_optimizer.zero_grad()
             # Make fake prediction
-            fake_prediction = self.discriminator(self.generator(torch.rand(HYPERPARAMETERS["batch_size"], 1)))
+            fake_prediction = self.discriminator(self.generator(get_noise(HYPERPARAMETERS["batch_size"])))
             # Compute generator loss
             generator_loss = self.generator_loss_function(fake_prediction)
             # Compute gradients
@@ -70,7 +70,7 @@ class ModelWrapper(object):
             # Make real prediction
             real_prediction = self.discriminator(torch.zeros(HYPERPARAMETERS["batch_size"], 1))
             # Make fake prediction
-            fake_prediction = self.discriminator(self.generator(torch.rand(HYPERPARAMETERS["batch_size"], 1)))
+            fake_prediction = self.discriminator(self.generator(get_noise(HYPERPARAMETERS["batch_size"])))
             # Compute generator loss
             discriminator_loss = self.discriminator_loss_function(real_prediction, fake_prediction)
             # Compute gradients
@@ -81,3 +81,12 @@ class ModelWrapper(object):
             parameter_history.append((self.generator.linear_layer.weight.data.item(),
                                       self.discriminator.linear_layer.weight.data.item()))
         return torch.tensor(parameter_history)
+
+
+def get_noise(batch_size: int) -> torch.Tensor:
+    """
+    Generates a noise tensor
+    :param batch_size: (int) Batch size to be utilized
+    :return: (torch.Tensor) Noise tensor
+    """
+    return 4. * torch.rand(batch_size, 1) - 1.
