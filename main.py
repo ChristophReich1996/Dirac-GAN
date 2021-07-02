@@ -9,7 +9,7 @@ import dirac_gan
 
 class App(QMainWindow):
     """
-    Application class
+    GUI application class
     """
 
     def __init__(self) -> None:
