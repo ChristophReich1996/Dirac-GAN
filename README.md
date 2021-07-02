@@ -1,6 +1,29 @@
 # DiracGAN
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ChristophReich1996/Cell-DETR/blob/master/LICENSE)
 
+<table>
+  <tr>
+    <td> Standard GAN loss </td>
+    <td> Non-saturating GAN loss </td>
+    <td> Wasserstein GAN </td>
+  </tr> 
+  <tr>
+    <td> <img src="/images/standard_gan.png"  alt="1" width = 200px height = 150px ></td>
+    <td> <img src="/images/non_saturating_gan.png" alt="2" width = 200px height = 150px></td>
+    <td> <img src="/images/wasserstein_gan.png"  alt="3" width = 200px height = 150px ></td>
+  </tr> 
+  <tr>
+    <td> Wasserstein GAN loss + GP </td>
+    <td> Least squares GAN </td>
+    <td> Hinge GAN </td>
+  </tr> 
+  <tr>
+    <td> <img src="/images/wasserstein_gp_gan.png"  alt="5" width = 200px height = 150px ></td>
+    <td> <img src="/images/ls_gan.png" alt="6" width = 200px height = 150px></td>
+    <td> <img src="/images/hinge_gan.png"  alt="7" width = 200px height = 150px ></td>
+  </tr>
+</table>
+
 This repository implements (PyTorch) the DiracGAN proposed in the paper "Which Training Methods for GANs do actually Converge?" by [Mescheder](https://github.com/LMescheder) et al. [1]. The original implementation of the authors can be found [here](https://github.com/LMescheder/GAN_stability).
 
 This work was done as part of the lecture deep generative models at TU Darmstadt supervised by [Dr. Anirban Mukhopadhyay](https://www.informatik.tu-darmstadt.de/gris/startseite_1/team/team_details_60224.en.jsp).
