@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 from .config import HYPERPARAMETERS
-from .loss import WassersteinGANLossGPDiscriminator, R1, R2
+from .loss import WassersteinGANLossGPDiscriminator, R1
 
 
 class ModelWrapper(object):
@@ -31,13 +31,13 @@ class ModelWrapper(object):
         :param regularization_loss: (Optional[nn.Module]) Regularization loss
         """
         # Save parameters
-        self.generator = generator
-        self.discriminator = discriminator
-        self.generator_optimizer = generator_optimizer
-        self.discriminator_optimizer = discriminator_optimizer
-        self.generator_loss_function = generator_loss_function
-        self.discriminator_loss_function = discriminator_loss_function
-        self.regularization_loss = regularization_loss
+        self.generator: nn.Module = generator
+        self.discriminator: nn.Module = discriminator
+        self.generator_optimizer: torch.optim.Optimizer = generator_optimizer
+        self.discriminator_optimizer: torch.optim.Optimizer = discriminator_optimizer
+        self.generator_loss_function: nn.Module = generator_loss_function
+        self.discriminator_loss_function: nn.Module = discriminator_loss_function
+        self.regularization_loss: nn.Module = regularization_loss
 
     def generate_trajectory(self, steps: int = 10, instance_noise: bool = True) -> Tuple[torch.Tensor, torch.Tensor]:
         """
@@ -50,8 +50,8 @@ class ModelWrapper(object):
         # Init list to store gradients
         gradients = []
         # Make parameters
-        generator_parameters = torch.linspace(start=-2, end=2, steps=steps)
-        discriminator_parameters = torch.linspace(start=-2, end=2, steps=steps)
+        generator_parameters: torch.Tensor = torch.linspace(start=-2, end=2, steps=steps)
+        discriminator_parameters: torch.Tensor = torch.linspace(start=-2, end=2, steps=steps)
         # Make parameter grid
         generator_parameters, discriminator_parameters = torch.meshgrid(generator_parameters, discriminator_parameters)
         generator_parameters = generator_parameters.reshape(-1)
@@ -66,47 +66,49 @@ class ModelWrapper(object):
             self.generator_optimizer.zero_grad()
             self.discriminator_optimizer.zero_grad()
             # Make fake prediction
-            fake_prediction = self.discriminator(self.generator(get_noise(2048)))
+            fake_prediction: torch.Tensor = self.discriminator(self.generator(get_noise(2048)))
             # Compute generator loss
-            generator_loss = self.generator_loss_function(fake_prediction)
+            generator_loss: torch.Tensor = self.generator_loss_function(fake_prediction)
             # Compute gradients
             generator_loss.backward()
             # Save generator gradient
-            generator_gradient = self.generator.get_gradient()
+            generator_gradient: float = self.generator.get_gradient()
             ########## Discriminator gradient ###########
             # Reset gradients
             self.generator_optimizer.zero_grad()
             self.discriminator_optimizer.zero_grad()
             # Make real prediction
-            real_samples = torch.zeros(HYPERPARAMETERS["batch_size"], 1)
+            real_samples: torch.Tensor = torch.zeros(HYPERPARAMETERS["batch_size"], 1)
             if instance_noise:
-                real_samples = real_samples \
-                               + torch.randn(HYPERPARAMETERS["batch_size"], 1) * HYPERPARAMETERS["in_scale"]
+                real_samples: torch.Tensor = real_samples \
+                                             + torch.randn(HYPERPARAMETERS["batch_size"], 1) \
+                                             * HYPERPARAMETERS["in_scale"]
             real_samples.requires_grad = True
-            real_prediction = self.discriminator(real_samples)
+            real_prediction: torch.Tensor = self.discriminator(real_samples)
             # Make fake prediction
-            noise = get_noise(2024)
-            fake = self.generator(noise)
-            fake_prediction = self.discriminator(fake)
+            noise: torch.Tensor = get_noise(2024)
+            fake: torch.Tensor = self.generator(noise)
+            fake_prediction: torch.Tensor = self.discriminator(fake)
             # Compute generator loss
             if isinstance(self.discriminator_loss_function, WassersteinGANLossGPDiscriminator):
-                discriminator_loss = self.discriminator_loss_function(real_prediction, fake_prediction,
-                                                                      self.discriminator, torch.zeros(2024, 1),
-                                                                      fake.detach())
+                discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction,
+                                                                                    self.discriminator,
+                                                                                    torch.zeros(2024, 1),
+                                                                                    fake.detach())
             else:
-                discriminator_loss = self.discriminator_loss_function(real_prediction, fake_prediction)
+                discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction)
             # Compute gradient penalty if utilized
             if self.regularization_loss is not None:
                 if isinstance(self.regularization_loss, R1):
-                    discriminator_loss = discriminator_loss + self.regularization_loss(
+                    discriminator_loss: torch.Tensor = discriminator_loss + self.regularization_loss(
                         real_prediction, real_samples)
                 else:
-                    discriminator_loss = discriminator_loss + self.regularization_loss(
+                    discriminator_loss: torch.Tensor = discriminator_loss + self.regularization_loss(
                         fake_prediction, noise)
             # Compute gradients
             discriminator_loss.backward()
             # Save generator gradient
-            discriminator_gradient = self.discriminator.get_gradient()
+            discriminator_gradient: float = self.discriminator.get_gradient()
             # Save both gradients
             gradients.append((generator_gradient, discriminator_gradient))
         return torch.stack((generator_parameters, discriminator_parameters), dim=-1), torch.tensor(gradients)
@@ -129,9 +131,9 @@ class ModelWrapper(object):
             self.generator_optimizer.zero_grad()
             self.discriminator_optimizer.zero_grad()
             # Make fake prediction
-            fake_prediction = self.discriminator(self.generator(get_noise(HYPERPARAMETERS["batch_size"])))
+            fake_prediction: torch.Tensor = self.discriminator(self.generator(get_noise(HYPERPARAMETERS["batch_size"])))
             # Compute generator loss
-            generator_loss = self.generator_loss_function(fake_prediction)
+            generator_loss: torch.Tensor = self.generator_loss_function(fake_prediction)
             # Compute gradients
             generator_loss.backward()
             # Perform optimization
@@ -141,30 +143,32 @@ class ModelWrapper(object):
             self.generator_optimizer.zero_grad()
             self.discriminator_optimizer.zero_grad()
             # Make real prediction
-            real_samples = torch.zeros(HYPERPARAMETERS["batch_size"], 1)
+            real_samples: torch.Tensor = torch.zeros(HYPERPARAMETERS["batch_size"], 1)
             if instance_noise:
-                real_samples = real_samples \
-                               + torch.randn(HYPERPARAMETERS["batch_size"], 1) * HYPERPARAMETERS["in_scale"]
+                real_samples: torch.Tensor = real_samples \
+                                             + torch.randn(HYPERPARAMETERS["batch_size"], 1) \
+                                             * HYPERPARAMETERS["in_scale"]
             real_samples.requires_grad = True
-            real_prediction = self.discriminator(real_samples)
+            real_prediction: torch.Tensor = self.discriminator(real_samples)
             # Make fake prediction
-            noise = get_noise(2024)
-            fake = self.generator(noise)
-            fake_prediction = self.discriminator(fake)
+            noise: torch.Tensor = get_noise(2024)
+            fake: torch.Tensor = self.generator(noise)
+            fake_prediction: torch.Tensor = self.discriminator(fake)
             # Compute generator loss
             if isinstance(self.discriminator_loss_function, WassersteinGANLossGPDiscriminator):
-                discriminator_loss = self.discriminator_loss_function(real_prediction, fake_prediction,
-                                                                      self.discriminator, torch.zeros(2024, 1),
-                                                                      fake.detach())
+                discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction,
+                                                                                    self.discriminator,
+                                                                                    torch.zeros(2024, 1),
+                                                                                    fake.detach())
             else:
-                discriminator_loss = self.discriminator_loss_function(real_prediction, fake_prediction)
+                discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction)
             # Compute gradient penalty if utilized
             if self.regularization_loss is not None:
                 if isinstance(self.regularization_loss, R1):
-                    discriminator_loss = discriminator_loss + self.regularization_loss(
+                    discriminator_loss: torch.Tensor = discriminator_loss + self.regularization_loss(
                         real_prediction, real_samples)
                 else:
-                    discriminator_loss = discriminator_loss + self.regularization_loss(
+                    discriminator_loss: torch.Tensor = discriminator_loss + self.regularization_loss(
                         fake_prediction, noise)
             # Compute gradients
             discriminator_loss.backward()
