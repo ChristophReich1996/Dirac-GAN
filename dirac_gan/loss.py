@@ -170,7 +170,7 @@ class WassersteinGANLossGPDiscriminator(nn.Module):
                 discriminator: nn.Module,
                 real_samples: torch.Tensor,
                 fake_samples: torch.Tensor,
-                lambda_gradient_penalty: Optional[float] = 2., **kwargs) -> torch.Tensor:
+                lambda_gradient_penalty: Optional[float] = 0.25, **kwargs) -> torch.Tensor:
         """
         Forward pass.
         :param discriminator_prediction_real: (torch.Tensor) Raw discriminator prediction for real samples
@@ -296,17 +296,17 @@ class R1(nn.Module):
         # Call super constructor
         super(R1, self).__init__()
 
-    def forward(self, prediction_real: torch.Tensor, image_real: torch.Tensor) -> torch.Tensor:
+    def forward(self, prediction_real: torch.Tensor, real_sample: torch.Tensor) -> torch.Tensor:
         """
         Forward pass to compute the regularization
         :param prediction_real: (torch.Tensor) Prediction of the discriminator for a batch of real images
-        :param image_real: (torch.Tensor) Batch of the corresponding real images
+        :param real_sample: (torch.Tensor) Batch of the corresponding real images
         :return: (torch.Tensor) Loss value
         """
         # Calc gradient
-        grad_real, = torch.autograd.grad(outputs=prediction_real.sum(), inputs=image_real, create_graph=True)
+        grad_real, = torch.autograd.grad(outputs=prediction_real.sum(), inputs=real_sample, create_graph=True)
         # Calc regularization
-        regularization_loss = 0.5 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        regularization_loss = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
         return regularization_loss
 
 
@@ -322,15 +322,15 @@ class R2(nn.Module):
         # Call super constructor
         super(R2, self).__init__()
 
-    def forward(self, prediction_fake: torch.Tensor, image_fake: torch.Tensor) -> torch.Tensor:
+    def forward(self, prediction_fake: torch.Tensor, fake_sample: torch.Tensor) -> torch.Tensor:
         """
         Forward pass to compute the regularization
         :param prediction_real: (torch.Tensor) Prediction of the discriminator for a batch of real images
-        :param image_real: (torch.Tensor) Batch of the corresponding real images
+        :param fake_sample: (torch.Tensor) Batch of the corresponding real images
         :return: (torch.Tensor) Loss value
         """
         # Calc gradient
-        grad_real = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=image_fake, create_graph=True)
+        grad_real, = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=fake_sample, create_graph=True)
         # Calc regularization
-        regularization_loss = 0.5 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        regularization_loss = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
         return regularization_loss
