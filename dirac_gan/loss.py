@@ -178,19 +178,19 @@ class WassersteinGANLossGPDiscriminator(nn.Module):
         :return: (torch.Tensor) Wasserstein discriminator GAN loss with gradient penalty
         """
         # Generate random alpha for interpolation
-        alpha = torch.rand((real_samples.shape[0], 1), device=real_samples.device)
+        alpha:torch.Tensor = torch.rand((real_samples.shape[0], 1), device=real_samples.device)
         # Make interpolated samples
-        samples_interpolated = (alpha * real_samples + (1. - alpha) * fake_samples)
+        samples_interpolated:torch.Tensor = (alpha * real_samples + (1. - alpha) * fake_samples)
         samples_interpolated.requires_grad = True
         # Make discriminator prediction
-        discriminator_prediction_interpolated = discriminator(samples_interpolated)
+        discriminator_prediction_interpolated:torch.Tensor = discriminator(samples_interpolated)
         # Calc gradients
-        gradients = torch.autograd.grad(outputs=discriminator_prediction_interpolated.sum(),
+        gradients:torch.Tensor = torch.autograd.grad(outputs=discriminator_prediction_interpolated.sum(),
                                         inputs=samples_interpolated,
                                         create_graph=True,
                                         retain_graph=True)[0]
         # Calc gradient penalty
-        gradient_penalty = (gradients.view(gradients.shape[0], -1).norm(dim=1) - 1.).pow(2).mean()
+        gradient_penalty:torch.Tensor = (gradients.view(gradients.shape[0], -1).norm(dim=1) - 1.).pow(2).mean()
         return - discriminator_prediction_real.mean() \
                + discriminator_prediction_fake.mean() \
                + lambda_gradient_penalty * gradient_penalty
@@ -304,9 +304,9 @@ class R1(nn.Module):
         :return: (torch.Tensor) Loss value
         """
         # Calc gradient
-        grad_real, = torch.autograd.grad(outputs=prediction_real.sum(), inputs=real_sample, create_graph=True)
+        grad_real = torch.autograd.grad(outputs=prediction_real.sum(), inputs=real_sample, create_graph=True)[0]
         # Calc regularization
-        regularization_loss = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        regularization_loss:torch.Tensor = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
         return regularization_loss
 
 
@@ -330,7 +330,7 @@ class R2(nn.Module):
         :return: (torch.Tensor) Loss value
         """
         # Calc gradient
-        grad_real, = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=fake_sample, create_graph=True)
+        grad_real = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=fake_sample, create_graph=True)[0]
         # Calc regularization
-        regularization_loss = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+        regularization_loss:torch.Tensor = 0.2 * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
         return regularization_loss
