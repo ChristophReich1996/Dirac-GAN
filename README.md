@@ -19,6 +19,15 @@ pip install -r requirements.txt
 
 ## Usage
 
+The implementation provides a simple GUI to run all DiracGAN experiment with different settings. Simply run:
+
+```shell script
+python main.py
+```
+
+Set the desired parameters in the GUI and click on run to perform training. This could take a few seconds. If the training
+is finished all results are plotted and shown.
+
 ## References
 
 ```bibtex
