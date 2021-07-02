@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from dirac_gan import HYPERPARAMETERS
+from dirac_gan.config import HYPERPARAMETERS
 
 
 class GANLossGenerator(nn.Module):
