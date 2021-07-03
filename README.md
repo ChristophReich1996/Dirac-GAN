@@ -1,7 +1,7 @@
-# DiracGAN
+# Dirac-GAN
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/ChristophReich1996/Cell-DETR/blob/master/LICENSE)
 
-This repository implements (PyTorch) the DiracGAN proposed in the paper "Which Training Methods for GANs do actually Converge?" by [Mescheder](https://github.com/LMescheder) et al. [1]. The original implementation of the authors can be found [here](https://github.com/LMescheder/GAN_stability).
+This repository implements (PyTorch) the Dirac-GAN proposed in the paper "Which Training Methods for GANs do actually Converge?" by [Mescheder](https://github.com/LMescheder) et al. [1]. The original implementation of the authors can be found [here](https://github.com/LMescheder/GAN_stability).
 
 This work was done as part of the lecture deep generative models at TU Darmstadt supervised by [Dr. Anirban Mukhopadhyay](https://www.informatik.tu-darmstadt.de/gris/startseite_1/team/team_details_60224.en.jsp).
 
@@ -32,7 +32,7 @@ This work was done as part of the lecture deep generative models at TU Darmstadt
 
 ## Dependencies
 
-DiracGAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required! All additional dependencies can be seen in the [`requirements.txt`](requirements.txt) file. To install all dependencies simply run:
+Dirac-GAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required! All additional dependencies can be seen in the [`requirements.txt`](requirements.txt) file. To install all dependencies simply run:
 
 ```shellscript
 pip install -r requirements.txt
@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-The implementation provides a simple GUI to run all DiracGAN experiments with different settings. Simply run:
+The implementation provides a simple GUI to run all Dirac-GAN experiments with different settings. Simply run:
 
 ```shell script
 python main.py
