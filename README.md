@@ -9,9 +9,9 @@ This work was done as part of the lecture deep generative models at TU Darmstadt
 
 <table>
   <tr>
-    <td> Standard GAN loss </td>
-    <td> Non-saturating GAN loss </td>
-    <td> Wasserstein GAN </td>
+    <td> Standard GAN loss + R1 </td>
+    <td> Non-saturating GAN loss + R1 </td>
+    <td> Wasserstein GAN + R1 </td>
   </tr> 
   <tr>
     <td> <img src="/images/standard_gan.png"  alt="1" width = 200px height = 150px ></td>
@@ -19,9 +19,9 @@ This work was done as part of the lecture deep generative models at TU Darmstadt
     <td> <img src="/images/wasserstein_gan.png"  alt="3" width = 200px height = 150px ></td>
   </tr> 
   <tr>
-    <td> Wasserstein GAN loss + GP </td>
-    <td> Least squares GAN </td>
-    <td> Hinge GAN </td>
+    <td> Wasserstein GAN loss + GP + R1 </td>
+    <td> Least squares GAN + R1 </td>
+    <td> Hinge GAN + R1 </td>
   </tr> 
   <tr>
     <td> <img src="/images/wasserstein_gp_gan.png"  alt="5" width = 200px height = 150px ></td>
