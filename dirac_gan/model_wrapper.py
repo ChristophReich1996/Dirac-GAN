@@ -175,8 +175,8 @@ class ModelWrapper(object):
             # Perform optimization
             self.discriminator_optimizer.step()
             # Save parameters
-            parameter_history.append((self.generator.linear_layer.weight.data.item(),
-                                      self.discriminator.linear_layer.weight.data.item()))
+            parameter_history.append((self.generator.get_gradient(),
+                                      self.discriminator.get_gradient()))
         return torch.tensor(parameter_history)
 
 
