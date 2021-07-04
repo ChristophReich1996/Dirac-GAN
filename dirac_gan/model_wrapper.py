@@ -86,14 +86,14 @@ class ModelWrapper(object):
             real_samples.requires_grad = True
             real_prediction: torch.Tensor = self.discriminator(real_samples)
             # Make fake prediction
-            noise: torch.Tensor = get_noise(2024)
+            noise: torch.Tensor = get_noise(1)
             fake: torch.Tensor = self.generator(noise)
             fake_prediction: torch.Tensor = self.discriminator(fake)
             # Compute generator loss
             if isinstance(self.discriminator_loss_function, WassersteinGANLossGPDiscriminator):
                 discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction,
                                                                                     self.discriminator,
-                                                                                    torch.zeros(2024, 1),
+                                                                                    torch.zeros(1, 1),
                                                                                     fake.detach())
             else:
                 discriminator_loss: torch.Tensor = self.discriminator_loss_function(real_prediction, fake_prediction)
@@ -175,8 +175,8 @@ class ModelWrapper(object):
             # Perform optimization
             self.discriminator_optimizer.step()
             # Save parameters
-            parameter_history.append((self.generator.get_gradient(),
-                                      self.discriminator.get_gradient()))
+            parameter_history.append((self.generator.get_weight(),
+                                      self.discriminator.get_weight()))
         return torch.tensor(parameter_history)
 
 

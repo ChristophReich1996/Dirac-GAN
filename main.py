@@ -92,7 +92,7 @@ class App(QMainWindow):
         # Init regularization loss
         if regularization == "None":
             regularization_loss: nn.Module = None
-        elif regularization == "R1":
+        elif regularization == "R1 gradient penalty":
             regularization_loss: nn.Module = dirac_gan.R1()
         else:
             regularization_loss: nn.Module = dirac_gan.R2()
@@ -103,6 +103,7 @@ class App(QMainWindow):
         discriminator_optimizer: torch.optim.Optimizer = torch.optim.SGD(params=discriminator.parameters(),
                                                                          lr=dirac_gan.HYPERPARAMETERS["lr"],
                                                                          momentum=0.)
+        print(generator_loss, regularization_loss)
         # Make model wrapper
         model_wrapper = dirac_gan.ModelWrapper(generator=generator,
                                                discriminator=discriminator,
