@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 from .config import HYPERPARAMETERS
-from .loss import WassersteinGANLossGPDiscriminator, R1, DRAGANLossDiscriminator
+from .loss import WassersteinGANLossGPDiscriminator, R1, DRAGANLossDiscriminator, RLC
 
 
 class ModelWrapper(object):
@@ -94,6 +94,9 @@ class ModelWrapper(object):
                 if isinstance(self.regularization_loss, R1):
                     discriminator_loss: torch.Tensor = self.regularization_loss(
                         real_prediction, real_samples)
+                elif isinstance(self.regularization_loss, RLC):
+                    discriminator_loss: torch.Tensor = self.regularization_loss(
+                        real_prediction, fake_prediction)
                 else:
                     discriminator_loss: torch.Tensor = self.regularization_loss(
                         fake_prediction, fake)
@@ -166,6 +169,9 @@ class ModelWrapper(object):
                 if isinstance(self.regularization_loss, R1):
                     discriminator_loss: torch.Tensor = self.regularization_loss(
                         real_prediction, real_samples)
+                elif isinstance(self.regularization_loss, RLC):
+                    discriminator_loss: torch.Tensor = self.regularization_loss(
+                        real_prediction, fake_prediction)
                 else:
                     discriminator_loss: torch.Tensor = self.regularization_loss(
                         fake_prediction, fake)

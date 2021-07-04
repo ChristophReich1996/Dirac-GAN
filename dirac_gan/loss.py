@@ -343,6 +343,31 @@ class R2(nn.Module):
         return regularization_loss
 
 
+class RLC(nn.Module):
+    """
+    Implementation of the RLC GAN regularization proposed in:
+    https://arxiv.org/pdf/2104.03310.pdf
+    """
+
+    def __init__(self):
+        """
+        Constructor method
+        """
+        # Call super constructor
+        super(RLC, self).__init__()
+
+    def forward(self, discriminator_prediction_real: torch.Tensor,
+                discriminator_prediction_fake: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass to compute the regularization
+        :param discriminator_prediction_real: (torch.Tensor) Real prediction of the discriminator
+        :param discriminator_prediction_fake: (torch.Tensor) Fake prediction of the discriminator
+        """
+        regularization_loss = (discriminator_prediction_real - HYPERPARAMETERS["rlc_af"]).norm(dim=-1).pow(2).mean() \
+                              + (discriminator_prediction_fake - HYPERPARAMETERS["rlc_ar"]).norm(dim=-1).pow(2).mean()
+        return HYPERPARAMETERS["rlc_w"] * regularization_loss
+
+
 class DRAGANLossGenerator(GANLossGenerator):
     """
     This class implements the generator loss proposed in:

@@ -36,6 +36,7 @@ class App(QMainWindow):
         self.regularization_box = QComboBox(self)
         self.regularization_box.addItem("None")
         self.regularization_box.addItem("R1 gradient penalty")
+        self.regularization_box.addItem("RLC")
         self.regularization_box.addItem("R2 gradient penalty")
         self.regularization_box.resize(300, 50)
         self.regularization_box.move(self.width - 300, self.height - 150)
@@ -99,6 +100,8 @@ class App(QMainWindow):
             regularization_loss: nn.Module = None
         elif regularization == "R1 gradient penalty":
             regularization_loss: nn.Module = dirac_gan.R1()
+        elif regularization == "RLC":
+            regularization_loss: nn.Module = dirac_gan.RLC()
         else:
             regularization_loss: nn.Module = dirac_gan.R2()
         # Init optimizers
