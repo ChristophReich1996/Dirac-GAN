@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # Check which regularization is utilized
     regularization: str = ""
     # Check which GAN loss is utilized
-    gan_loss: str = "Standard GAN"
+    gan_loss: str = "DRAGAN"
     # Init generator and discriminator
     generator: nn.Module = dirac_gan.Generator()
     discriminator: nn.Module = dirac_gan.Discriminator()
@@ -30,6 +30,9 @@ if __name__ == '__main__':
     elif gan_loss == "Least squares GAN":
         generator_loss: nn.Module = dirac_gan.LSGANLossGenerator()
         discriminator_loss: nn.Module = dirac_gan.LSGANLossDiscriminator()
+    elif gan_loss == "DRAGAN":
+        generator_loss: nn.Module = dirac_gan.DRAGANLossGenerator()
+        discriminator_loss: nn.Module = dirac_gan.DRAGANLossDiscriminator()
     else:
         generator_loss: nn.Module = dirac_gan.HingeGANLossGenerator()
         discriminator_loss: nn.Module = dirac_gan.HingeGANLossDiscriminator()

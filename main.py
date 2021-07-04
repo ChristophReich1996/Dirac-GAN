@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox, QCheckBox
+import pyqtgraph as pg
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
@@ -45,6 +46,7 @@ class App(QMainWindow):
         self.gan_list_box.addItem("Wasserstein GAN")
         self.gan_list_box.addItem("Wasserstein GAN GP")
         self.gan_list_box.addItem("Least squares GAN")
+        self.gan_list_box.addItem("DRAGAN")
         self.gan_list_box.addItem("Hinge GAN")
         self.gan_list_box.resize(300, 50)
         self.gan_list_box.move(self.width - 300, self.height - 100)
@@ -86,6 +88,9 @@ class App(QMainWindow):
         elif gan_loss == "Least squares GAN":
             generator_loss: nn.Module = dirac_gan.LSGANLossGenerator()
             discriminator_loss: nn.Module = dirac_gan.LSGANLossDiscriminator()
+        elif gan_loss == "DRAGAN":
+            generator_loss: nn.Module = dirac_gan.DRAGANLossGenerator()
+            discriminator_loss: nn.Module = dirac_gan.DRAGANLossDiscriminator()
         else:
             generator_loss: nn.Module = dirac_gan.HingeGANLossGenerator()
             discriminator_loss: nn.Module = dirac_gan.HingeGANLossDiscriminator()

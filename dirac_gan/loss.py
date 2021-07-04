@@ -336,8 +336,54 @@ class R2(nn.Module):
         :return: (torch.Tensor) Loss value
         """
         # Calc gradient
-        grad_real = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=fake_sample, create_graph=True)[0]
+        grad_fake = torch.autograd.grad(outputs=prediction_fake.sum(), inputs=fake_sample, create_graph=True)[0]
         # Calc regularization
         regularization_loss: torch.Tensor = HYPERPARAMETERS["r2_w"] \
-                                            * grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+                                            * grad_fake.pow(2).view(grad_fake.shape[0], -1).sum(1).mean()
         return regularization_loss
+
+
+class DRAGANLossGenerator(GANLossGenerator):
+    """
+    This class implements the generator loss proposed in:
+    https://arxiv.org/pdf/1705.07215.pdf
+    """
+
+    def __init__(self) -> None:
+        """
+        Constructor method
+        """
+        # Call super constructor
+        super(DRAGANLossGenerator, self).__init__()
+
+
+class DRAGANLossDiscriminator(nn.Module):
+    """
+    This class implements the generator loss proposed in:
+    https://arxiv.org/pdf/1705.07215.pdf
+    """
+
+    def __init__(self) -> None:
+        """
+        Constructor method
+        """
+        # Call super constructor
+        super(DRAGANLossDiscriminator, self).__init__()
+
+    def forward(self, discriminator_prediction_real: torch.Tensor,
+                discriminator_prediction_fake: torch.Tensor, real_samples: torch.Tensor, discriminator: nn.Module,
+                **kwargs) -> torch.Tensor:
+        """
+        Forward pass.
+        :param discriminator_prediction_real: (torch.Tensor) Raw discriminator prediction for real samples
+        :param discriminator_prediction_fake: (torch.Tensor) Raw discriminator predictions for fake samples
+        :return: (torch.Tensor) Hinge discriminator GAN loss
+        """
+        # Loss can be computed by utilizing the softplus function since softplus combines both sigmoid and log
+        loss = F.softplus(- discriminator_prediction_real).mean() \
+               + F.softplus(discriminator_prediction_fake).mean()
+        # Compute regularization loss
+        real_prediction = discriminator(real_samples + torch.randn_like(real_samples) * 0.1)
+        grad_real = torch.autograd.grad(outputs=real_prediction.sum(), inputs=real_samples, create_graph=True)[0]
+        loss = loss + HYPERPARAMETERS["dra_w"] * (grad_real.norm(dim=1) - 1.).pow(2)
+        return loss

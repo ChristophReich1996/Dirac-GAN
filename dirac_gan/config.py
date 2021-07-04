@@ -7,5 +7,6 @@ HYPERPARAMETERS: Dict[str, Any] = {
     "in_scale": 0.5,
     "r1_w": 0.2,
     "r2_w": 0.2,
-    "gp_w": 0.25
+    "gp_w": 0.25,
+    "dra_w": 0.1
 }

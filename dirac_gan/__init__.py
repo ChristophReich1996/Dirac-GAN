@@ -5,7 +5,7 @@ from dirac_gan.discriminator import Discriminator
 from dirac_gan.loss import GANLossGenerator, GANLossDiscriminator, NSGANLossGenerator, NSGANLossDiscriminator, \
     LSGANLossGenerator, LSGANLossDiscriminator, WassersteinGANLossGenerator, WassersteinGANLossDiscriminator, \
     WassersteinGANLossGPGenerator, WassersteinGANLossGPDiscriminator, HingeGANLossGenerator, HingeGANLossDiscriminator, \
-    R1, R2
+    R1, R2, DRAGANLossGenerator, DRAGANLossDiscriminator
 # Import model wrapper
 from dirac_gan.model_wrapper import ModelWrapper
 # Import hyperparameters
