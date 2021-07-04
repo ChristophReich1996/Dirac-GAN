@@ -189,7 +189,7 @@ class App(QMainWindow):
                                                discriminator_loss_function=discriminator_loss,
                                                regularization_loss=regularization_loss)
         # Get trajectory
-        parameters, gradients = model_wrapper.generate_trajectory()
+        parameters, gradients = model_wrapper.generate_trajectory(instance_noise=instance_noise)
         # Perform training
         parameter_history: torch.Tensor = model_wrapper.train(instance_noise=instance_noise)
         # Plot results

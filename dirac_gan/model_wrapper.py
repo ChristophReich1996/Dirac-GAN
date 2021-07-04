@@ -205,4 +205,5 @@ def get_noise(batch_size: int) -> torch.Tensor:
     :param batch_size: (int) Batch size to be utilized
     :return: (torch.Tensor) Noise tensor
     """
-    return 4. * torch.rand(batch_size, 1, requires_grad=True) - 1.
+    # return 4. * torch.rand(batch_size, 1, requires_grad=True) - 1.
+    return torch.ones(batch_size, 1)
