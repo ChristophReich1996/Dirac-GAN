@@ -55,8 +55,8 @@ class DynamicCanvas(Canvas):
         """
         Method sets the initial figure
         """
-        self.axes.set_xlim((-2, 2))
-        self.axes.set_ylim((-2, 2))
+        self.axes.set_xlim((-2.1, 2.1))
+        self.axes.set_ylim((-2.1, 2.1))
         self.axes.grid()
 
     def update_figure(self, parameters: torch.Tensor, gradients: torch.Tensor, parameter_history: torch.Tensor) -> None:
@@ -67,6 +67,9 @@ class DynamicCanvas(Canvas):
         :param parameter_history: (torch.Tensor) Parameter history of training [m, 2]
         """
         self.axes.cla()
+        self.axes.grid()
+        self.axes.set_xlim((-2.1, 2.1))
+        self.axes.set_ylim((-2.1, 2.1))
         self.axes.quiver(parameters[..., 0], parameters[..., 1], -gradients[..., 0], -gradients[..., 1])
         self.axes.scatter(parameter_history[..., 0], parameter_history[..., 1])
         self.axes.scatter([1.], [1.], color="red")
