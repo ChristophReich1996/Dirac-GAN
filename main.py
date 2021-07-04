@@ -103,7 +103,6 @@ class App(QMainWindow):
         discriminator_optimizer: torch.optim.Optimizer = torch.optim.SGD(params=discriminator.parameters(),
                                                                          lr=dirac_gan.HYPERPARAMETERS["lr"],
                                                                          momentum=0.)
-        print(generator_loss, regularization_loss)
         # Make model wrapper
         model_wrapper = dirac_gan.ModelWrapper(generator=generator,
                                                discriminator=discriminator,

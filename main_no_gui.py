@@ -8,9 +8,9 @@ if __name__ == '__main__':
     # Check if instance noise is utilized
     instance_noise: bool = False
     # Check which regularization is utilized
-    regularization: str = "None"
+    regularization: str = ""
     # Check which GAN loss is utilized
-    gan_loss: str = "Wasserstein GAN GP"
+    gan_loss: str = "Standard GAN"
     # Init generator and discriminator
     generator: nn.Module = dirac_gan.Generator()
     discriminator: nn.Module = dirac_gan.Discriminator()
