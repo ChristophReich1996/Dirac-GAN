@@ -48,6 +48,12 @@ This repository implements the following GAN losses and regularizers.
 | Hinge GAN | <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}^{\text{LSGAN}}_{D}=-\mathbb{E}_{x\sim p_{d}}[\min(0, D(x)-1] - \mathbb{E}_{\hat{x}\sim p_{g}}[\min(0, -D(\hat{x})-1)]"> | <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}^{\text{LSGAN}}_{G}=\mathcal{L}^{\text{WGAN}}_{G}"> |
 | DRAGAN | <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}_{D}^{\text{DRAGAN}}=\mathcal{L}_{D}^{\text{GAN}} %2B \lambda\mathbb{E}_{\hat{x}\sim p_{d} %2B \mathcal{N}(0, c)}[(\lvert\lvert\nabla D(\hat{x})\rvert\rvert_{2} - 1)^2]"> | <img src="https://render.githubusercontent.com/render/math?math=\mathcal{L}_{G}^{\text{DRAGAN}}=\mathcal{L}_{G}^{\text{GAN}}"> |
 
+| Method | Generator loss |
+| :--- | :--- |
+| <img src="https://render.githubusercontent.com/render/math?math=R_{1}"> regularization | <img src="https://render.githubusercontent.com/render/math?math=R_{1}=\frac{\gamma}{2}\mathbb{E}_{x\sim p_{d}}[\lvert\lvert\nabla D(x)\rvert\rvert^2]"> |
+| <img src="https://render.githubusercontent.com/render/math?math=R_{2}"> regularization | <img src="https://render.githubusercontent.com/render/math?math=R_{2}=\frac{\gamma}{2}\mathbb{E}_{\hat{x}\sim p_{g}}[\lvert\lvert\nabla D(x)\rvert\rvert^2]"> |
+| <img src="https://render.githubusercontent.com/render/math?math=R_{\text{LC}}"> regularization | <img src="https://render.githubusercontent.com/render/math?math=R_{\text{LC}}=\mathbb{E}_{x\sim p_{d}}[\lvert\lvert D(x) - \alpha_{F}\rvert\rvert^{2}] %2B \mathbb{E}_{\hat{x}\sim p_{g}}[\lvert\lvert D(G(\hat{x})) - \alpha_{R}\rvert\rvert^{2}]"> |
+
 ## Dependencies
 
 Dirac-GAN is written in [PyTorch 1.8.1](https://pytorch.org/). No GPU is required! All additional dependencies can be seen in the [`requirements.txt`](requirements.txt) file. To install all dependencies simply run:
