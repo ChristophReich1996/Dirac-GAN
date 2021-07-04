@@ -1,5 +1,3 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox, QCheckBox
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
@@ -10,9 +8,9 @@ if __name__ == '__main__':
     # Check if instance noise is utilized
     instance_noise: bool = False
     # Check which regularization is utilized
-    regularization: str = "R2 gradient penalty"
+    regularization: str = "None"
     # Check which GAN loss is utilized
-    gan_loss: str = "Standard GAN"
+    gan_loss: str = "Wasserstein GAN GP"
     # Init generator and discriminator
     generator: nn.Module = dirac_gan.Generator()
     discriminator: nn.Module = dirac_gan.Discriminator()
