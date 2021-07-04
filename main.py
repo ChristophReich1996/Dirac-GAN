@@ -1,11 +1,78 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox, QCheckBox
-import pyqtgraph as pg
-import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.use('Qt5Agg')
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox, QCheckBox, QSizePolicy
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 import torch
 import torch.nn as nn
 
 import dirac_gan
+
+
+class Canvas(FigureCanvas):
+    """
+    General canvas class
+    """
+
+    def __init__(self, parent: "App" = None, width: int = 5, height: int = 4, dpi: int = 100) -> None:
+        """
+        Constructor method
+        :param parent: (App) Parent app
+        :param width: (int) Width of the plot
+        :param height: (int) Height of the plot
+        :param dpi: (int) DPI to be utilized
+        """
+        # Init figure
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        # Call super constructor and set parent
+        FigureCanvas.__init__(self, fig)
+        self.setParent(parent)
+        # Set some properties
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+
+
+class DynamicCanvas(Canvas):
+    """
+    A dynamic canvas.
+    """
+
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Constructor method
+        :param args: Arguments
+        :param kwargs: Key word arguments
+        """
+        # Call super constructor
+        Canvas.__init__(self, *args, **kwargs)
+        # Initialize figure
+        self.compute_initial_figure()
+
+    def compute_initial_figure(self) -> None:
+        """
+        Method sets the initial figure
+        """
+        self.axes.set_xlim((-2, 2))
+        self.axes.set_ylim((-2, 2))
+        self.axes.grid()
+
+    def update_figure(self, parameters: torch.Tensor, gradients: torch.Tensor, parameter_history: torch.Tensor) -> None:
+        """
+        Method updates figure
+        :param parameters: (torch.Tensor) Parameters of vector field [n, 2]
+        :param gradients: (torch.Tensor) Gradients vectors of vector field [n, 2]
+        :param parameter_history: (torch.Tensor) Parameter history of training [m, 2]
+        """
+        self.axes.cla()
+        self.axes.quiver(parameters[..., 0], parameters[..., 1], -gradients[..., 0], -gradients[..., 1])
+        self.axes.scatter(parameter_history[..., 0], parameter_history[..., 1])
+        self.axes.scatter([1.], [1.], color="red")
+        self.axes.set_xlabel("$\\theta$")
+        self.axes.set_ylabel("$\\psi$")
+        self.draw()
 
 
 class App(QMainWindow):
@@ -23,11 +90,13 @@ class App(QMainWindow):
         self.left: int = 50
         self.top: int = 50
         self.title: str = "DiracGAN"
-        self.width: int = 300
-        self.height: int = 200
+        self.width: int = 800
+        self.height: int = 500
         # General setting
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        # Make dynamic plot
+        self.dynamic_plot = DynamicCanvas(self, width=5, height=5, dpi=100)
         # Make list box to choose regularization
         self.instance_noise_box = QCheckBox("Instance noise", self)
         self.instance_noise_box.resize(300, 50)
@@ -123,16 +192,8 @@ class App(QMainWindow):
         parameters, gradients = model_wrapper.generate_trajectory()
         # Perform training
         parameter_history: torch.Tensor = model_wrapper.train(instance_noise=instance_noise)
-        # Perform plotting
-        plt.quiver(parameters[..., 0], parameters[..., 1], -gradients[..., 0], -gradients[..., 1])
-        plt.scatter(parameter_history[..., 0], parameter_history[..., 1])
-        plt.scatter([1.], [1.], color="red")
-        plt.grid()
-        plt.xlim((-2, 2))
-        plt.ylim((-2, 2))
-        plt.xlabel("$\\theta$")
-        plt.ylabel("$\\psi$")
-        plt.show()
+        # Plot results
+        self.dynamic_plot.update_figure(parameters=parameters, gradients=gradients, parameter_history=parameter_history)
 
 
 if __name__ == '__main__':
