@@ -126,6 +126,7 @@ class App(QMainWindow):
         # Perform plotting
         plt.quiver(parameters[..., 0], parameters[..., 1], -gradients[..., 0], -gradients[..., 1])
         plt.scatter(parameter_history[..., 0], parameter_history[..., 1])
+        plt.scatter([1.], [1.], color="red")
         plt.grid()
         plt.xlim((-2, 2))
         plt.ylim((-2, 2))
