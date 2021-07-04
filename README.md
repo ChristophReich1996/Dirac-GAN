@@ -3,7 +3,7 @@
 
 This repository implements (PyTorch) the Dirac-GAN proposed in the paper "Which Training Methods for GANs do actually Converge?" by [Mescheder](https://github.com/LMescheder) et al. [1]. The original implementation of the authors can be found [here](https://github.com/LMescheder/GAN_stability).
 
-This work was done as part of the lecture deep generative models at TU Darmstadt supervised by [Dr. Anirban Mukhopadhyay](https://www.informatik.tu-darmstadt.de/gris/startseite_1/team/team_details_60224.en.jsp).
+This work was done as part of the lecture Deep Generative Models at TU Darmstadt held by [Dr. Anirban Mukhopadhyay](https://www.informatik.tu-darmstadt.de/gris/startseite_1/team/team_details_60224.en.jsp).
 
 **Parts of this implementation are taken from my recent [mode collapse example repository](https://github.com/ChristophReich1996/Mode_Collapse).**
 
