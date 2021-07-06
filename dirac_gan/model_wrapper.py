@@ -107,7 +107,7 @@ class ModelWrapper(object):
                 discriminator_loss: torch.Tensor = discriminator_loss + self.discriminator_loss_function(
                     real_prediction, fake_prediction,
                     self.discriminator,
-                    torch.zeros(1, 1),
+                    torch.zeros(HYPERPARAMETERS["batch_size"], 1),
                     fake.clone().detach())
             elif isinstance(self.discriminator_loss_function, DRAGANLossDiscriminator):
                 discriminator_loss: torch.Tensor = discriminator_loss + self.discriminator_loss_function(

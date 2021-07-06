@@ -47,4 +47,5 @@ class Generator(nn.Module):
         :param noise: (torch.Tensor) Input noise tensor of the shape [batch size, 1]
         :return: (torch.Tensor) Generated samples of the shape [batch size, 1]
         """
-        return self.parameter
+        prediction = torch.repeat_interleave(self.parameter, repeats=noise.shape[0], dim=0)
+        return prediction
